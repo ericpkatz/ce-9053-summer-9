@@ -55,12 +55,18 @@ app.get("/things", function(req, res){
 
 app.post("/things/new", function(req, res){
    var thing = new Thing(req.body); 
-   thing.save()
-    .then(function(){
+   thing.save(function(err, _thing){
        res.redirect("/things"); 
     });
 });
 
+app.post("/things/:id/delete", function(req, res, next){
+    Thing.remove({_id: req.params.id})
+        .then(function(){
+            res.redirect("/things");
+        });
+    
+});
 app.post("/things/:id", function(req, res){
     Thing.update(
         {_id: req.params.id}, 

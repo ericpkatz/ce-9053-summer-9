@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 var thingSchema = mongoose.Schema({
-    name: String
+    name: { type: String, required: true }
 });
 
 var Thing = mongoose.model("thing", thingSchema);
