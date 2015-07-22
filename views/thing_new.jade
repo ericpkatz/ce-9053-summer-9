@@ -1,6 +1,11 @@
 extends layout
 block content
     a(href="/things") Back to list
+    
+    if error
+        .alert.alert-danger
+            =error
+            
     form.form(method="POST")
         div.form-group
             label(for="thing_name") Name

@@ -7,6 +7,10 @@ block content
             li 
                 a(href="/things/#{thing._id}")
                     =thing.name
+                br    
+                a(href="/things/#{thing._id}")
+                   | Edit 
+                    
                 
     if things.length == 0
         .alert.alert-danger

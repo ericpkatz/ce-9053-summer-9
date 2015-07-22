@@ -56,7 +56,15 @@ app.get("/things", function(req, res){
 app.post("/things/new", function(req, res){
    var thing = new Thing(req.body); 
    thing.save(function(err, _thing){
-       res.redirect("/things"); 
+       if(!err)
+         res.redirect("/things"); 
+       else{
+            res.render("thing_new", {
+                activePath: "/things",
+                title: "Insert a New Thing",
+                error: err
+            });
+       }
     });
 });
 
@@ -68,12 +76,22 @@ app.post("/things/:id/delete", function(req, res, next){
     
 });
 app.post("/things/:id", function(req, res){
-    Thing.update(
-        {_id: req.params.id}, 
-        {$set:{ name: req.body.name}}
-    ).then(function(){
-        res.redirect("/things"); 
-    });
+    Thing.findById(req.params.id)
+        .then(function(thing){
+            thing.name = req.body.name;
+            thing.save(function(err, _thing){
+                if(!err)
+                    res.redirect("/things"); 
+                else {
+                    res.render("thing", {
+                       error: err,
+                       activePath: "/things",
+                       thing: thing,
+                       title: "Thing " + thing.name
+                    });  
+                }
+            });
+        });
 });
 
 app.get("/things/new", function(req, res){
