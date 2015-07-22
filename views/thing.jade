@@ -1,0 +1,14 @@
+extends layout
+block content
+    a(href="/things") Back to list
+    h1 
+        =thing.name
+    form.form(method="POST")
+        div.form-group
+            label(for="thing_name") Name
+            input.form-control#thing_name(name="name" value=thing.name)
+        div
+            button.btn.btn-primary(type="submit")
+                | Save
+        
+                
