@@ -13,10 +13,11 @@ block content
         div
             button.btn.btn-primary(type="submit")
                 | Save
-    form.form(method="POST" action="/things/#{thing._id}/delete")
-        div
-            button.btn.btn-warning(type="sumbit")
-                | Delete
-            
+    if !thing.isNew
+        form.form(method="POST" action="/things/#{thing._id}/delete")
+            div
+                button.btn.btn-warning(type="sumbit")
+                    | Delete
+                
         
                 

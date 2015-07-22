@@ -59,7 +59,8 @@ app.post("/things/new", function(req, res){
        if(!err)
          res.redirect("/things"); 
        else{
-            res.render("thing_new", {
+            res.render("thing", {
+                thing: new Thing(),
                 activePath: "/things",
                 title: "Insert a New Thing",
                 error: err
@@ -95,7 +96,8 @@ app.post("/things/:id", function(req, res){
 });
 
 app.get("/things/new", function(req, res){
-    res.render("thing_new", {
+    res.render("thing", {
+        thing: new Thing(),
         activePath: "/things",
         title: "Insert a New Thing"
     });
