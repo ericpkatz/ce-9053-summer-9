@@ -10,7 +10,7 @@ block content
         div.form-group
             label(for="thing_name") Name
             input.form-control#thing_name(name="name" value=thing.name)
-        div.checkbox
+        .checkbox
             label
                 input(type="checkbox" name="active" checked=thing.active)
                 | Active
@@ -19,7 +19,6 @@ block content
                 | Save
     if !thing.isNew
         form.form(method="POST" action="/things/#{thing._id}/delete")
-            div
                 button.btn.btn-warning(type="sumbit")
                     | Delete
                 

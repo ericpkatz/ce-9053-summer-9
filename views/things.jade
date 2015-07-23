@@ -17,13 +17,11 @@ block content
                 a.btn.btn-default(href="/things/#{thing._id}")
                    | Edit 
                 
-                br
-                br
                 if thing.active
-                    h6.label.label-success 
-                        | active
+                    .label.label-success(style="float:right;width:120px;")
+                            | active
                 else
-                    h6.label.label-warning 
+                    .label.label-warning(style="float:right;width:120px;")
                         | not active
                     
                 

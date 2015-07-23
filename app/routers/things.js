@@ -36,6 +36,10 @@ app.get("/", function(req, res){
 
 app.post("/new", function(req, res){
    var thing = new Thing(req.body); 
+    if(typeof req.body.active == 'undefined')
+        thing.active = false;
+    else
+        thing.active = req.body.active;
    thing.save(function(err){
        if(!err){
          req.flash("info", "A thing with an id of " + thing._id + " has been inserted");
@@ -62,9 +66,11 @@ app.post("/:id/delete", function(req, res, next){
 });
 app.post("/:id", findThingById, function(req, res){
             var thing = res.locals.thing;
-            console.log(req.body);
             thing.name = req.body.name;
-            thing.active = req.body.active;
+            if(typeof req.body.active == 'undefined')
+                thing.active = false;
+            else
+                thing.active = req.body.active;
             thing.save(function(err, _thing){
                 if(!err){
                     req.flash("info", "A Thing with the name " + thing.name + " has been saved");

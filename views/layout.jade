@@ -6,13 +6,12 @@ html
         script(src="/vendor/bootstrap/dist/js/bootstrap.js")
         link(href="/vendor/bootstrap/dist/css/bootstrap.min.css", rel="stylesheet")
     body
-        ul.nav.nav-tabs
+        ul.nav.nav-tabs(style="margin-bottom:10px")
             each tab in tabs
                 li(class={"active": tab.isActive(activePath)})
                     a(href=tab.path) 
                         =tab.title
         .container
-            .well
-                h3 
-                    =title
+            h4 
+                =title
             block content
