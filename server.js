@@ -43,6 +43,28 @@ app.get("/people", function(req, res){
        activePath: "/people"
    });
 });
+
+function findThingById(req, res, next){
+    res.locals.activePath = "/things";
+    res.locals.title = "Add A New Thing";
+    if(req.params.id){
+        Thing.findById(req.params.id, function(err, thing){
+               if(err)
+                    next(err);
+               else{
+                   res.locals.thing = thing; 
+                   res.locals.title = "Editing " + thing.name;
+                   next();
+               }
+            });
+    }
+    else{
+        res.locals.thing = new Thing(); 
+        next();
+    }
+        
+}
+
 app.get("/things", function(req, res){
     Thing.find({}).then(function(things){
        res.render("things", {
@@ -76,9 +98,8 @@ app.post("/things/:id/delete", function(req, res, next){
         });
     
 });
-app.post("/things/:id", function(req, res){
-    Thing.findById(req.params.id)
-        .then(function(thing){
+app.post("/things/:id", findThingById, function(req, res){
+            var thing = res.locals.thing;
             thing.name = req.body.name;
             thing.save(function(err, _thing){
                 if(!err)
@@ -86,32 +107,19 @@ app.post("/things/:id", function(req, res){
                 else {
                     res.render("thing", {
                        error: err,
-                       activePath: "/things",
                        thing: thing,
                        title: "Thing " + thing.name
                     });  
                 }
             });
-        });
 });
 
-app.get("/things/new", function(req, res){
-    res.render("thing", {
-        thing: new Thing(),
-        activePath: "/things",
-        title: "Insert a New Thing"
-    });
+app.get("/things/new", findThingById, function(req, res){
+    res.render("thing");
     
 });
-app.get("/things/:id", function(req, res){
-    Thing.findById(req.params.id)
-        .then(function(thing){
-            res.render("thing", {
-               activePath: "/things",
-               thing: thing,
-               title: "Thing " + thing.name
-            });  
-        });
+app.get("/things/:id", findThingById, function(req, res){
+    res.render("thing");  
 });
 
 app.listen(process.env.PORT);
