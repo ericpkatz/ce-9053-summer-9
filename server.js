@@ -3,6 +3,9 @@ var Tab = require("./app/tab");
 var db = require("./app/config/db");
 var Thing = require("./app/models/thing");
 var bodyParser = require("body-parser");
+var session = require("express-session");
+var cookieParser = require("cookie-parser");
+var flash = require("express-flash");
 
 db.connect()
     .then(function(){
@@ -18,6 +21,10 @@ app.locals.pretty = true;
 app.set("view engine", "jade");
 
 app.use(express.static(__dirname + "/public"));
+
+app.use(cookieParser("my secret"));
+app.use(session({cookie: {  }}));
+app.use(flash());
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -77,9 +84,11 @@ app.get("/things", function(req, res){
 
 app.post("/things/new", function(req, res){
    var thing = new Thing(req.body); 
-   thing.save(function(err, _thing){
-       if(!err)
+   thing.save(function(err){
+       if(!err){
+         req.flash("info", "A thing with an id of " + thing._id + " has been inserted");
          res.redirect("/things"); 
+       }
        else{
             res.render("thing", {
                 thing: new Thing(),
@@ -94,6 +103,7 @@ app.post("/things/new", function(req, res){
 app.post("/things/:id/delete", function(req, res, next){
     Thing.remove({_id: req.params.id})
         .then(function(){
+            req.flash("info", "A thing has been deleted")
             res.redirect("/things");
         });
     
@@ -102,8 +112,10 @@ app.post("/things/:id", findThingById, function(req, res){
             var thing = res.locals.thing;
             thing.name = req.body.name;
             thing.save(function(err, _thing){
-                if(!err)
+                if(!err){
+                    req.flash("info", "A Thing with the name " + thing.name + " has been saved");
                     res.redirect("/things"); 
+                }
                 else {
                     res.render("thing", {
                        error: err,
