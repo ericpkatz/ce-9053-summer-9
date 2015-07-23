@@ -8,14 +8,23 @@ block content
             
     a(href="/things/new") 
         | Create a new thing
-    ul
+    ul.list-group
         each thing in things
-            li 
+            li.list-group-item 
                 a(href="/things/#{thing._id}")
                     =thing.name
                 br    
-                a(href="/things/#{thing._id}")
+                a.btn.btn-default(href="/things/#{thing._id}")
                    | Edit 
+                
+                br
+                br
+                if thing.active
+                    h6.label.label-success 
+                        | active
+                else
+                    h6.label.label-warning 
+                        | not active
                     
                 
     if things.length == 0
